@@ -1,1 +1,7 @@
 bert_training/classifier/checkpoints
+bert_training/classifier/__MACOSX
+bert_training/classifier/2pageSessions.csv
+bert_training/classifier/NewsAggregatorDataset.zip
+bert_training/classifier/newsCorpora_re.csv
+bert_training/classifier/newsCorpora.csv
+bert_training/classifier/readme.txt
