@@ -8,4 +8,8 @@ bert_training/classifier/readme.txt
 bert_training/classifier/chABSA-dataset
 bert_training/classifier/chABSA-dataset.zip
 
+bert_training/retrieval/stair_captions_*
+bert_training/retrieval/STAIR-captions
+
 twitter_analytics/.env
+
