@@ -66,3 +66,28 @@ class Transformer(nn.Module):
         # mask
         pad_mask_src = self._pad_mask(src)
         src = self.encoder(src, pad_mask_src)
+
+        # target系列の"0(BOS)~max_len-1"(max_len-1系列)までを入力し、"1~max_len"(max_len-1系列)を予測する
+        mask_self_attn = torch.logical_or(  # OR演算
+            self._subsequent_mask(tgt), self._pad_mask(tgt)
+        )
+        dec_output = self.decoder(tgt, src, pad_mask_src, mask_self_attn)
+
+        return self.linear(dec_output)
+
+    def _pad_mask(self, x: torch.Tensor) -> torch.Tensor:
+        """単語のid列からmaskを作成する"""
+        seq_len = x.size(1)
+        mask = x.eq(self.pad_idx)
+        mask = mask.unsqueeze(1)
+        mask = mask.repeat(1, seq_len, 1)
+        return mask.to(self.device)
+
+    def _subsequent_mask(self, x: torch.Tensor) -> torch.Tensor:
+        """DecoderのMasked-Attentionに使用するmaskを作成する"""
+        batch_size = x.size(0)
+        max_len = x.size(1)
+        return (
+            torch.tril(torch.ones(batch_size, max_len, max_len)).eq(
+                0).to(self.device)
+        )
