@@ -11,6 +11,9 @@ bert_training/classifier/chABSA-dataset.zip
 bert_training/retrieval/stair_captions_*
 bert_training/retrieval/STAIR-captions
 
+screen_translator/__pycache__
+screen_translator/.env
+
 twitter_analytics/.env
 
 wordnet/*.db
