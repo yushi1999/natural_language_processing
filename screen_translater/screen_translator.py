@@ -5,9 +5,10 @@ from pynput.keyboard import Key, Listener
 import time
 import tkinter as tk
 from requests import post
-import keyboard
 from keyboard_monitor import KeyMonitor
 from mouse_monitor import MouseMonitor
+from dotenv import load_dotenv
+import os
 
 """
 スクリーンショットキーの押下を検出
@@ -18,7 +19,8 @@ DeepL APIに投げる
 返ってきた翻訳結果で上書き
 """
 
-AUTH_KEY = "a3974814-244d-92aa-f2ef-a052e503a78b:fx"
+load_dotenv(".env")
+AUTH_KEY=os.environ.get("AUTH_KEY")
 
 class ImageToString:
     def __init__(self):
@@ -70,19 +72,17 @@ class Application(tk.Tk):
     def __init__(self, x1, x2, y1, y2):
         super().__init__()
         self.coor = x1, x2, y1, y2
-        self.title("Transparent window")
+        self.title("Translation text")
         self.attributes("-alpha", 0.95)
         self.attributes("-topmost", True)
         self.bind("<Configure>", self.sized)
         self.bind("<Shift-ButtonPress-1>", self.toggleOverrideRedirect)
         time.sleep(0.5)
-        #self.quit = tk.Button(self, text="x", command=self.destroy)
-        #self.quit.place(relx=1, rely=0, anchor="ne")
         c=ImageToString()
         self.text = c.run("eng")
         self.label = tk.Label(
             self,
-            font=("游ゴシック", "12"),
+            font=("ヒラギノ角ゴシック", "14"),
             anchor="e",
             justify="left",
             text=self.text,
@@ -91,7 +91,7 @@ class Application(tk.Tk):
         tr.translate(self, self.text)
         self.label.pack(expand=True)
         self.geometry(
-            f"{x2-x1}x{max(self.label.winfo_reqheight()+40, y2-y1)}+{x1}+{y1}"
+            f"{x2-x1+20}x{max(self.label.winfo_reqheight()+30, y2-y1)}+{x1}+{y1}"
         )
 
     def sized(self, *args):
@@ -121,11 +121,9 @@ class ScreenTranslator:
             if key.is_pressed("4") and key.is_pressed(Key.cmd) and key.is_pressed(Key.shift) and key.is_pressed(Key.ctrl):
                 print("4 keys are pushed.")
                 app = Application(*self.get_rectcoordinate())
-                app.overrideredirect(1)
-                tk.Button(app, text="Quit", command=app.quit).pack()
+                #app.overrideredirect(1)
                 print("mainloop.")
                 app.mainloop()
-            print("aaaaa")
 
     # 左クリックをした位置と離した位置の座標を取得する
     def get_rectcoordinate(self):
