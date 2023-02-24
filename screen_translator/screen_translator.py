@@ -20,22 +20,24 @@ DeepL APIに投げる
 """
 
 load_dotenv(".env")
-AUTH_KEY=os.environ.get("AUTH_KEY")
+AUTH_KEY = os.environ.get("AUTH_KEY")
+
 
 class ImageToString:
     def __init__(self):
-        self.text=""
-    
-    def run(self,lang="jpn"):
-        img=ImageGrab.grabclipboard()
+        self.text = ""
+
+    def run(self, lang="jpn"):
+        img = ImageGrab.grabclipboard()
         if img:
-            self.text=pytesseract.image_to_string(img,lang=lang)
+            self.text = pytesseract.image_to_string(img, lang=lang)
         return self.text
+
 
 class Translator:
     def __init__(self, auth_key):
         self.data = {
-            "source_lang": "EN",
+            "source_lang": "KO",
             "target_lang": "JA",
             "split_sentences": "nonewlines",
             "auth_key": auth_key,
@@ -78,11 +80,11 @@ class Application(tk.Tk):
         self.bind("<Configure>", self.sized)
         self.bind("<Shift-ButtonPress-1>", self.toggleOverrideRedirect)
         time.sleep(0.5)
-        c=ImageToString()
-        self.text = c.run("eng")
+        c = ImageToString()
+        self.text = c.run("kor")
         self.label = tk.Label(
             self,
-            font=("ヒラギノ角ゴシック", "14"),
+            font=("ヒラギノ角ゴシック", "18"),
             anchor="e",
             justify="left",
             text=self.text,
@@ -113,7 +115,7 @@ class ScreenTranslator:
     def start(self):
         key = KeyMonitor()  # キーイベントを検出
         key_th = Thread(target=key.start, args=(),
-            daemon=True)  # スレッド処理を行う
+                        daemon=True)  # スレッド処理を行う
         key_th.start()
 
         while True:
@@ -121,7 +123,7 @@ class ScreenTranslator:
             if key.is_pressed("4") and key.is_pressed(Key.cmd) and key.is_pressed(Key.shift) and key.is_pressed(Key.ctrl):
                 print("4 keys are pushed.")
                 app = Application(*self.get_rectcoordinate())
-                #app.overrideredirect(1)
+                # app.overrideredirect(1)
                 print("mainloop.")
                 app.mainloop()
 
@@ -129,7 +131,7 @@ class ScreenTranslator:
     def get_rectcoordinate(self):
         mou = MouseMonitor()  # マウスイベントを検出
         mou_th = Thread(target=mou.start, args=(),
-            daemon=True)
+                        daemon=True)
         mou_th.start()
         while True:
             if mou.released:
