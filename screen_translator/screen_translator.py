@@ -37,7 +37,7 @@ class ImageToString:
 class Translator:
     def __init__(self, auth_key):
         self.data = {
-            "source_lang": "KO",
+            "source_lang": "EN",
             "target_lang": "JA",
             "split_sentences": "nonewlines",
             "auth_key": auth_key,
@@ -81,10 +81,10 @@ class Application(tk.Tk):
         self.bind("<Shift-ButtonPress-1>", self.toggleOverrideRedirect)
         time.sleep(0.5)
         c = ImageToString()
-        self.text = c.run("kor")
+        self.text = c.run("eng")
         self.label = tk.Label(
             self,
-            font=("ヒラギノ角ゴシック", "18"),
+            font=("ヒラギノ角ゴシック", "14"),
             anchor="e",
             justify="left",
             text=self.text,
